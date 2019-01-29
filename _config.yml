@@ -1,25 +1,25 @@
 # Site settings
-title: Pointing to the Moon
-description: Blog of Yingkai Liu
+title: San Pie Kan Kan, find some differences
+description: 三撇看看
 baseurl: "" 
-url: "https://yk-liu.github.io" 
+url: "https://sanpiekankan.com" 
 
 # GitHub User settings
-username: Yingkai Liu
-github_username: yk-liu
-user_description: A Physics undergrad with a broad interest
-user_title: Physics Undergraduate
-email: yingkai.liu@outlook.com
+username: Sanpiekankan
+github_username: sanpiekankan
+user_description: 
+user_title: 
+email: sanpiekankan@gmail.com
 
 # Blog Author settings
 author:
-  name:           Yingkai Liu
+  name:           sanpiekankan
   picture:        
-  email:          yingkai.liu@outlook.com
-  description:    I'm a Physics undergrad with a broad interest.
+  email:          sanpiekankan@gmail.com
+  description:    
   twitter:
   facebook:
-  github:         https://github.com/yk-liu
+  github:         https://github.com/sanpiekankan
   linkedin:
 
 
