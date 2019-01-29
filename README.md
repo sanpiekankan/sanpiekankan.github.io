@@ -1,4 +1,4 @@
 本博客写写文章，记录心情，发表些看法而已。
 
 感谢素未谋面的人开源此博客代码，使得我可以容易地“拿来主义”地使用，省心一点也好。
-(喜欢这个风格的朋友们也可以访问https://yk-liu.github.io)[https://yk-liu.github.io]
+[喜欢这个风格的朋友们也可以访问https://yk-liu.github.io](https://yk-liu.github.io)
