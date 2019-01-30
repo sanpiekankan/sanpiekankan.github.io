@@ -186,7 +186,7 @@ sub,sup{
     font-size:50px;
     display:block;
     line-height:1;
-    color:white
+    color:grey
 }
 @media only screen and (min-width:550px){
     .header .site-title{
@@ -198,7 +198,7 @@ sub,sup{
     font-size:20px;
     display:block;
     line-height:1;
-    color:white;
+    color:grey;
     margin-top:10px
 }
 @media only screen and (min-width:550px){
