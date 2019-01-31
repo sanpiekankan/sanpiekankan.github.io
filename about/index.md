@@ -8,7 +8,7 @@ protected: true
 mathjax: true
 ---
 
-##沧海一粟 A drop in the ocean
+## 沧海一粟 A drop in the ocean##
 
 A drop in the ocean<br>
 A change in the weather<br>
@@ -22,4 +22,4 @@ But I know even a drop in the ocean or a change in the weather can cause
 a series of changes to the world, that's the reason why the world is changing
 all the time.
 
-By Sanpiekankan 三撇看看
+*By* Sanpiekankan 三撇看看
