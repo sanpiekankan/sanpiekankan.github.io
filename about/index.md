@@ -18,9 +18,7 @@ It's like wishing for rain as I stand in the desert <br>
 But I'm holding you closer than most 'cause you are my heaven<br>
 You are my heaven
 
-This song teach me to know who am I and where am I in the universe.
+This song teaches me to reflect who I am and where I am in the universe.
 But I know even a drop in the ocean or a change in the weather can cause 
 a series of changes to the world, that's the reason why the world is changing
 all the time.
-
-*By* Sanpiekankan 三撇看看
