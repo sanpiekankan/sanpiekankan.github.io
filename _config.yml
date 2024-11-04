@@ -1,7 +1,6 @@
 # Base configs
 baseurl: "https://photostory.work"
 #baseurl: "" # Comment the above line and uncomment this to test the website locally
-static_files: "/images"
 image_fulls_loc: "/images/fulls"
 image_thumbs_loc: "/images/thumbs"
 google_analytics: ""
