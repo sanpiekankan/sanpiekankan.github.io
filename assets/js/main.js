@@ -234,7 +234,8 @@
             // <img> (which is then hidden). Gives us way more flexibility.
 
             // Set background.
-            $image.css('background-image', 'url(' + $image_img.attr('src') + ')');
+            // Use data-src for lazy loading the thumbnail background
+            $image.css('background-image', 'url(' + $image_img.attr('data-src') + ')');
 
             // Set background position.
             if (x = $image_img.data('position'))
@@ -253,28 +254,61 @@
                         $image.trigger('click');
                     });
 
-            // EXIF data
-            $image_img[0].addEventListener("load", function() {
-                EXIF.getData($image_img[0], function () {
-                    exifDatas[$image_img.data('name')] = getExifDataMarkup(this);
-                });
-            });
+            // EXIF data: Original event listener removed as $image_img[0].src is empty.
+            // EXIF data will be loaded on demand by Poptrox or pre-cached.
 
         });
 
         // Poptrox.
+        var site_exif_show = ($('#main').data('exif') !== undefined && $('#main').data('exif') !== '');
+
         $main.poptrox({
             baseZIndex: 20000,
-            caption: function ($a) {
-                var $image_img = $a.children('img');
-                var data = exifDatas[$image_img.data('name')];
-                if (data === undefined) {
-                    // EXIF data					
-                    EXIF.getData($image_img[0], function () {
-                        data = exifDatas[$image_img.data('name')] = getExifDataMarkup(this);
-                    });
+            caption: function ($a) { // $a is the jQuery object for the link clicked
+                var $image_img = $a.children('img'); // This is the original <img> from the thumbnail
+                var image_name = $image_img.data('name');
+                var image_title = $image_img.attr('alt') || ''; // Get title from alt attribute
+
+                if (exifDatas[image_name] !== undefined) {
+                    // EXIF data is cached
+                    return image_title + exifDatas[image_name];
+                } else if (site_exif_show && EXIF) {
+                    // EXIF data not cached, and EXIF is enabled. Attempt to load it.
+                    // Poptrox caption is synchronous, so we return a placeholder and load async for next time.
+                    var fullImageUrl = $a.attr('href');
+                    
+                    // Prevent multiple simultaneous fetches for the same image
+                    if (!window.exifFetchingFlags || !window.exifFetchingFlags[image_name]) {
+                        if (!window.exifFetchingFlags) {
+                            window.exifFetchingFlags = {};
+                        }
+                        window.exifFetchingFlags[image_name] = true;
+
+                        var tempImgForExif = new Image();
+                        // tempImgForExif.crossOrigin = "Anonymous"; // Uncomment if images are on a different domain and CORS is configured
+                        tempImgForExif.src = fullImageUrl;
+                        
+                        tempImgForExif.onload = function() {
+                            EXIF.getData(this, function() {
+                                exifDatas[image_name] = getExifDataMarkup(this);
+                                delete window.exifFetchingFlags[image_name]; 
+                                // Data is now cached. Poptrox won't auto-update this instance's caption.
+                                // If poptrox instance is available, one could try to update caption here, e.g.,
+                                // if ($main[0] && $main[0]._poptrox && $main[0]._poptrox.active) {
+                                //   $main[0]._poptrox.updateCaption(image_title + exifDatas[image_name]);
+                                // }
+                            });
+                        };
+                        tempImgForExif.onerror = function() {
+                            exifDatas[image_name] = "<p>EXIF data not available.</p>"; // Cache error state
+                            delete window.exifFetchingFlags[image_name];
+                        };
+                    }
+                    return image_title + "<p>Loading EXIF data...</p>";
+                } else {
+                    // EXIF is disabled or not available, just return title
+                    return image_title;
                 }
-                return data !== undefined ? '<p>' + data + '</p>' : ' ';
             },
             fadeSpeed: 300,
             onPopupClose: function () {
