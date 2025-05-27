@@ -1528,6 +1528,8 @@
 		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
 		-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+		padding: 1em; /* Added padding */
+		gap: 1em; /* Added gap for grid spacing */
 	}
 
 		#main .thumb {
@@ -1649,9 +1651,9 @@
 			-webkit-transition-delay: 2.525s;
 			-ms-transition-delay: 2.525s;
 			transition-delay: 2.525s;
-			height: calc(40vh - 2em);
+			height: calc(40vh - 2em); /* This might need review if -2em was for outer spacing */
 			min-height: 20em;
-			width: 25%;
+			width: calc((100% - 3em) / 4); /* Adjusted for 4 columns with 1em gap */
 		}
 
 			#main .thumb:nth-child(1) {
@@ -1745,9 +1747,9 @@
 				-webkit-transition-delay: 2.075s;
 				-ms-transition-delay: 2.075s;
 				transition-delay: 2.075s;
-				height: calc(40vh - 2em);
+				height: calc(40vh - 2em); /* This might need review */
 				min-height: 20em;
-				width: 33.33333%;
+				width: calc((100% - 2em) / 3); /* Adjusted for 3 columns with 1em gap */
 			}
 
 				#main .thumb:nth-child(1) {
@@ -1822,9 +1824,9 @@
 				-webkit-transition-delay: 1.625s;
 				-ms-transition-delay: 1.625s;
 				transition-delay: 1.625s;
-				height: calc(40vh - 2em);
+				height: calc(40vh - 2em); /* This might need review */
 				min-height: 20em;
-				width: 50%;
+				width: calc((100% - 1em) / 2); /* Adjusted for 2 columns with 1em gap */
 			}
 
 				#main .thumb:nth-child(1) {
@@ -1955,9 +1957,9 @@
 				-webkit-transition-delay: 1.175s;
 				-ms-transition-delay: 1.175s;
 				transition-delay: 1.175s;
-				height: calc(40vh - 2em);
+				height: calc(40vh - 2em); /* This might need review */
 				min-height: 18em;
-				width: 100%;
+				width: 100%; /* Full width for 1 column, gap is not horizontal here */
 			}
 
 				#main .thumb:nth-child(1) {
