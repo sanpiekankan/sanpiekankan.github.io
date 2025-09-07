@@ -126,7 +126,7 @@ export default function PhotoModal({ isOpen, onClose, images, currentIndex, onNa
         )}
         
         <Image
-          src={`/images/${currentImage}`}
+          src={currentImage} // 直接使用传入的完整路径，不要再添加 /images/
           alt={`图片: ${currentImage}`}
           fill
           style={{ objectFit: 'contain' }}
@@ -134,12 +134,16 @@ export default function PhotoModal({ isOpen, onClose, images, currentIndex, onNa
           onLoad={() => setIsLoading(false)}
           onLoadStart={() => setIsLoading(true)}
           priority
+          quality={90}
+          sizes="90vw"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       </div>
 
       {/* 图片信息 */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-center">
-        <p className="text-lg font-medium mb-1">{currentImage}</p>
+        <p className="text-lg font-medium mb-1">{currentImage.split('/').pop()}</p> {/* 只显示文件名 */}
         <p className="text-sm text-gray-300">
           {currentIndex + 1} / {images.length}
         </p>

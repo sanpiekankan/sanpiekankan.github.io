@@ -5,7 +5,7 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    unoptimized: true, // 简化配置，禁用图片优化
   },
   // GitHub Pages部署配置
   basePath: process.env.NODE_ENV === 'production' ? '/sanpiekankan.github.io' : '',

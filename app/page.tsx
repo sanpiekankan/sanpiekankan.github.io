@@ -11,6 +11,8 @@ import Image from 'next/image';
  */
 export default function Home() {
   const [allImages, setAllImages] = useState<string[]>([]);
+  const [imageFormat, setImageFormat] = useState<string>('original');
+  const [imageDirectory, setImageDirectory] = useState<string>('images');
   const [stories, setStories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +28,8 @@ export default function Home() {
         const imageResponse = await fetch('/api/images');
         const imageData = await imageResponse.json();
         setAllImages(imageData.images || []);
+        setImageFormat(imageData.format || 'original');
+        setImageDirectory(imageData.directory || 'images');
 
         // 获取故事数据
         const storiesResponse = await fetch('/api/stories');
@@ -42,6 +46,18 @@ export default function Home() {
 
     fetchData();
   }, []);
+
+  /**
+   * 获取图片的完整路径
+   * @param {string} filename - 图片文件名
+   * @returns {string} 完整的图片路径
+   */
+  const getImagePath = (filename: string): string => {
+    if (imageFormat === 'webp') {
+      return `/images/webp/${filename}`;
+    }
+    return `/images/${filename}`;
+  };
 
   /**
    * 打开照片模态框
@@ -102,9 +118,12 @@ export default function Home() {
           </div>
         </section>
       )}
+      
       {/* 照片画廊区域 */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">照片画廊</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          照片画廊
+        </h2>
         {allImages.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {allImages.map((filename, index) => (
@@ -115,19 +134,25 @@ export default function Home() {
               >
                 <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
                   <Image
-                    src={`/images/${filename}`}
+                    src={getImagePath(filename)}
                     alt={`图片 ${index + 1}: ${filename}`}
                     fill
                     style={{ objectFit: 'cover' }}
                     className="transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, (max-width: 1536px) 33vw, 25vw"
-                    priority={index < 8} // 优先加载前8张图片
+                    priority={index < 4}
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                    quality={imageFormat === 'webp' ? 90 : 75}
                   />
                   {/* 图片信息覆盖层 */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-end">
                     <div className="w-full p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                       <p className="text-sm font-medium truncate">{filename}</p>
-                      <p className="text-xs text-gray-300 mt-1">点击查看大图</p>
+                      <p className="text-xs text-gray-300 mt-1">
+                        {imageFormat === 'webp' ? 'WebP 格式' : '原始格式'} • 点击查看大图
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -137,7 +162,9 @@ export default function Home() {
         ) : (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">暂无图片</p>
-            <p className="text-gray-400 text-sm mt-2">请在 public/images 目录中添加图片文件</p>
+            <p className="text-gray-400 text-sm mt-2">
+              请在 public/images{imageFormat === 'webp' ? '/webp' : ''} 目录中添加图片文件
+            </p>
           </div>
         )}
       </section>
@@ -146,7 +173,7 @@ export default function Home() {
       <PhotoModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        images={allImages}
+        images={allImages.map(filename => getImagePath(filename))}
         currentIndex={currentImageIndex}
         onNavigate={navigateToImage}
       />
