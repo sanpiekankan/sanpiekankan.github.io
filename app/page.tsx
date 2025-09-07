@@ -80,10 +80,10 @@ export default function Home() {
 
   return (
     <main className="p-4 pt-20">
-      {/* 故事集区域 */}
-      <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">故事集</h2>
-        {stories.length > 0 ? (
+      {/* 故事集区域 - 只有当有故事时才显示 */}
+      {stories.length > 0 && (
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center">故事集</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {stories.map((story) => (
               <div key={story.slug} className="aspect-[4/3] relative">
@@ -100,14 +100,8 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">暂无故事</p>
-            <p className="text-gray-400 text-sm mt-2">请在 content/stories 目录中添加 MDX 文件</p>
-          </div>
-        )}
-      </section>
-
+        </section>
+      )}
       {/* 照片画廊区域 */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">照片画廊</h2>
