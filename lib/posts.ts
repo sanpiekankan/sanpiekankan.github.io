@@ -42,7 +42,14 @@ export function getSortedPostsData(): Omit<PostData, 'content' | 'contentHtml'>[
     // Combine the data with the slug
     return {
       slug,
-      ...(matterResult.data as { title: string; date: string; description: string; coverImage: string }),
+      ...(matterResult.data as { 
+        title: string; 
+        date: string; 
+        description: string; 
+        coverImage: string;
+        galleryImages?: string[]; // 可选属性
+      }),
+      galleryImages: (matterResult.data as any).galleryImages || [], // 提供默认值
     };
   });
 
