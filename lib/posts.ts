@@ -26,32 +26,33 @@ export interface PostData {
  * @returns {Omit<PostData, 'content' | 'contentHtml'>[]} A sorted array of post data without content.
  */
 export function getSortedPostsData(): Omit<PostData, 'content' | 'contentHtml'>[] {
-  // Get file names under /content/stories
   const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    // Remove ".mdx" from file name to get slug
-    const slug = fileName.replace(/\.mdx$/, '');
+  const allPostsData = fileNames
+    .filter(fileName => fileName.endsWith('.mdx')) // 只处理 .mdx 文件
+    .map((fileName) => {
+      // Remove ".mdx" from file name to get slug
+      const slug = fileName.replace(/\.mdx$/, '');
 
-    // Read markdown file as string
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+      // Read markdown file as string
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents);
+      // Use gray-matter to parse the post metadata section
+      const matterResult = matter(fileContents);
 
-    // Combine the data with the slug
-    return {
-      slug,
-      ...(matterResult.data as { 
-        title: string; 
-        date: string; 
-        description: string; 
-        coverImage: string;
-        galleryImages?: string[]; // 可选属性
-      }),
-      galleryImages: (matterResult.data as any).galleryImages || [], // 提供默认值
-    };
-  });
+      // Combine the data with the slug
+      return {
+        slug,
+        ...(matterResult.data as { 
+          title: string; 
+          date: string; 
+          description: string; 
+          coverImage: string;
+          galleryImages?: string[]; // 可选属性
+        }),
+        galleryImages: (matterResult.data as any).galleryImages || [], // 提供默认值
+      };
+    });
 
   // Sort posts by date
   return allPostsData.sort((a, b) => {
@@ -73,11 +74,13 @@ export function getSortedPostsData(): Omit<PostData, 'content' | 'contentHtml'>[
  */
 export function getAllPostSlugs() {
   const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName) => {
-    return {
-      slug: fileName.replace(/\.mdx$/, ''),
-    };
-  });
+  return fileNames
+    .filter(fileName => fileName.endsWith('.mdx')) // 只处理 .mdx 文件
+    .map((fileName) => {
+      return {
+        slug: fileName.replace(/\.mdx$/, ''),
+      };
+    });
 }
 
 /**
