@@ -24,26 +24,26 @@ function getExifDateTime(filePath: string): Date | null {
     if (!exifBuffer.toString('ascii', 0, 4).includes('Exif')) return null;
     
     // 解析EXIF数据
-    const tiffBuffer = exifBuffer.slice(6); // 跳过"Exif\0\0"
-    const exif = exifReader(tiffBuffer);
+    const tiffBuffer = exifBuffer.slice(6); // 跳过\"Exif\\0\\0\"
+    const exif = exifReader(tiffBuffer) as any; // 使用any类型避免类型错误
     
     // 尝试获取拍摄时间（按优先级）
-    const dateTimeOriginal = exif?.exif?.DateTimeOriginal;
-    const dateTime = exif?.image?.DateTime;
-    const dateTimeDigitized = exif?.exif?.DateTimeDigitized;
+    const dateTimeOriginal = exif?.exif?.DateTimeOriginal || exif?.DateTimeOriginal;
+    const dateTime = exif?.image?.DateTime || exif?.DateTime;
+    const dateTimeDigitized = exif?.exif?.DateTimeDigitized || exif?.DateTimeDigitized;
     
     const dateString = dateTimeOriginal || dateTime || dateTimeDigitized;
     
     if (dateString) {
-      // EXIF日期格式: "YYYY:MM:DD HH:MM:SS"
-      const formattedDate = dateString.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3');
+      // EXIF日期格式: \"YYYY:MM:DD HH:MM:SS\"
+      const formattedDate = dateString.replace(/^(\\d{4}):(\\d{2}):(\\d{2})/, '$1-$2-$3');
       const date = new Date(formattedDate);
       return isNaN(date.getTime()) ? null : date;
     }
     
     return null;
   } catch (error) {
-    console.warn(`无法读取EXIF数据: ${filePath}`, error.message);
+    console.warn(`无法读取EXIF数据: ${filePath}`, (error as Error).message);
     return null;
   }
 }
